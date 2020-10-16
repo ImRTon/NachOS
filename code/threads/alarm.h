@@ -22,28 +22,7 @@
 #include "callback.h"
 #include "timer.h"
 #include "thread.h"
-#include <vector>
-
-class BedList //put slept thread here
-{
-public:
-	BedList():_current_interrupt_counter(0) {};
-	void toSleep(Thread *t, int x);
-	bool wakeup();
-	bool isEmpty();
-	~BedList();
-private:
-	class Bed
-	{
-	public:
-		Bed(Thread* t, int x):
-                    		sleeper(t), wokeUpTime(x) {};
-                	Thread* sleeper;
-                	int wokeUpTime;
-	};
-	int _current_interrupt_counter;
-   	std::vector<Bed> _beds;
-};
+#include "Bed.h"
 
 // The following class defines a software alarm clock. 
 class Alarm : public CallBackObj {
@@ -56,9 +35,10 @@ class Alarm : public CallBackObj {
 
   private:
     Timer *timer;		// the hardware timer device
-    BedList _bedList;
+
     void CallBack();		// called when the hardware
 				// timer generates an interrupt
+    BedManager _BedManager;
 };
 
 #endif // ALARM_H
